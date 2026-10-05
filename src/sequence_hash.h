@@ -30,8 +30,9 @@ uint64_t sequence_mac_##name##_output_size();\
 uint64_t sequence_mac_##name##_block_size();
 
 #define GENERATE_DEFS(name) \
-GENERATE_SEQUENCE_FUNCTION_STATE(sha256) \
+GENERATE_SEQUENCE_FUNCTION_STATE(name) \
 GENERATE_SEQHSH_DEFS(name) \
 GENERATE_SEQMAC_DEFS(name)
 
 GENERATE_DEFS(sha256)
+GENERATE_DEFS(sha512)
