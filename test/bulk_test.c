@@ -146,12 +146,20 @@ void sequence_mac_##name##_test() {\
 
 GENERATE_HASH_TEST(sha256)
 GENERATE_HASH_TEST(sha512)
+GENERATE_HASH_TEST(sha3_256)
+GENERATE_HASH_TEST(sha3_512)
 GENERATE_MAC_TEST(sha256)
 GENERATE_MAC_TEST(sha512)
+GENERATE_MAC_TEST(sha3_256)
+GENERATE_MAC_TEST(sha3_512)
 
 int main() {
     sequence_hash_sha256_test();
     sequence_hash_sha512_test();
+    sequence_hash_sha3_256_test();
+    sequence_hash_sha3_512_test();
     sequence_mac_sha256_test();
     sequence_mac_sha512_test();
+    sequence_mac_sha3_256_test();
+    sequence_mac_sha3_512_test();
 }

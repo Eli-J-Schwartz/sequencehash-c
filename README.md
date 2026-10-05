@@ -2,7 +2,7 @@
 
 This repository provides the SequenceHash and SequenceMAC functions for the C programming language. You can find more details about the SequenceHash family of functions [here](https://c2sp.org/sequencehash), but the short version is that writing to SequenceHash and SequenceMAC objects is an _atomic_ operation: writing `abcd` is _not_ the same as writing `ab` and `cd` separately.
 
-Right now, SequenceHash and SequenceMAC are only available with the hash functions SHA-256 and SHA-512. More will be added soon, and custom hash functions can be added by following the hash function API described below.
+Right now, SequenceHash and SequenceMAC are only available with the hash functions SHA-256, SHA-512, SHA3-256, and SHA3-512. More will be added soon, and custom hash functions can be added by following the hash function API described below.
 
 # How to Use SequenceHash and SequenceMAC
 
