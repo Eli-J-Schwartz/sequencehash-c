@@ -11,7 +11,7 @@ uint8_t decode_hex_char(char c) {
 }
 
 #define GENERATE_HASH_TEST(name) \
-void sequence_hash_##name##_test() {\
+bool sequence_hash_##name##_test() {\
     FILE* test_file = fopen("test/test_data/hash/" #name ".json", "r");\
     int test_count = 0;\
     int correct_count = 0;\
@@ -74,7 +74,7 @@ void sequence_hash_##name##_test() {\
 }
 
 #define GENERATE_MAC_TEST(name) \
-void sequence_mac_##name##_test() {\
+bool sequence_mac_##name##_test() {\
     FILE* test_file = fopen("test/test_data/mac/" #name ".json", "r");\
     int test_count = 0;\
     int correct_count = 0;\
@@ -148,18 +148,33 @@ GENERATE_HASH_TEST(sha256)
 GENERATE_HASH_TEST(sha512)
 GENERATE_HASH_TEST(sha3_256)
 GENERATE_HASH_TEST(sha3_512)
+GENERATE_HASH_TEST(blake2s)
+GENERATE_HASH_TEST(blake2b)
 GENERATE_MAC_TEST(sha256)
 GENERATE_MAC_TEST(sha512)
 GENERATE_MAC_TEST(sha3_256)
 GENERATE_MAC_TEST(sha3_512)
+GENERATE_MAC_TEST(blake2s)
+GENERATE_MAC_TEST(blake2b)
 
 int main() {
-    sequence_hash_sha256_test();
-    sequence_hash_sha512_test();
-    sequence_hash_sha3_256_test();
-    sequence_hash_sha3_512_test();
-    sequence_mac_sha256_test();
-    sequence_mac_sha512_test();
-    sequence_mac_sha3_256_test();
-    sequence_mac_sha3_512_test();
+    bool all_correct = true;
+    all_correct &= sequence_hash_sha256_test();
+    all_correct &= sequence_hash_sha512_test();
+    all_correct &= sequence_hash_sha3_256_test();
+    all_correct &= sequence_hash_sha3_512_test();
+    all_correct &= sequence_hash_blake2s_test();
+    all_correct &= sequence_hash_blake2b_test();
+    all_correct &= sequence_mac_sha256_test();
+    all_correct &= sequence_mac_sha512_test();
+    all_correct &= sequence_mac_sha3_256_test();
+    all_correct &= sequence_mac_sha3_512_test();
+    all_correct &= sequence_mac_blake2s_test();
+    all_correct &= sequence_mac_blake2b_test();
+
+    if (all_correct) {
+        printf("Overall test results: [\x1b[32mALL TESTS PASSED\x1b[0m]\n");
+    } else {
+        printf("Overall test results: [\x1b[31mSOME TESTS FAILED\x1b[0m]\n");
+    }
 }

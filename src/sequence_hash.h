@@ -3,6 +3,7 @@
 
 #include "hash_functions/sha2.h"
 #include "hash_functions/sha3.h"
+#include "hash_functions/blake2.h"
 
 typedef enum sequence_function_status {
     SEQUENCE_FUNCTION_UNINITIALIZED = 0,
@@ -48,3 +49,5 @@ GENERATE_DEFS(sha256)
 GENERATE_DEFS(sha512)
 GENERATE_DEFS(sha3_256)
 GENERATE_DEFS(sha3_512)
+GENERATE_DEFS(blake2s)
+GENERATE_DEFS(blake2b)
