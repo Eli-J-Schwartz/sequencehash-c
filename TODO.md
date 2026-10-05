@@ -1,12 +1,12 @@
 - [ ] More Hash Functions
-  - [ ] SHA3-256
-  - [ ] SHA3-512
+  - [X] SHA3-256
+  - [X] SHA3-512
   - [ ] Blake2s
   - [ ] Blake2b
   - [ ] SHA1?
-- [ ] Automatic Testing, Pulled From [https://github.com/C2SP/CCTV/tree/main/sequencehash](https://github.com/C2SP/CCTV/tree/main/sequencehash)
+- [X] Automatic Testing, Pulled From [https://github.com/C2SP/CCTV/tree/main/sequencehash](https://github.com/C2SP/CCTV/tree/main/sequencehash)
 - [ ] Error Checking and Handling
-  - [ ] Improper Order-of-Operations
-  - [ ] Too Short MAC Keys
+  - [X] Improper Order-of-Operations
+  - [X] Too Short MAC Keys
   - [ ] Insecure Function Check?
 - [ ] Automaitic Build System
