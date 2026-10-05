@@ -1,8 +1,8 @@
 - [ ] More Hash Functions
   - [X] SHA3-256
   - [X] SHA3-512
-  - [ ] Blake2s
-  - [ ] Blake2b
+  - [X] Blake2s
+  - [X] Blake2b
   - [ ] SHA1?
 - [X] Automatic Testing, Pulled From [https://github.com/C2SP/CCTV/tree/main/sequencehash](https://github.com/C2SP/CCTV/tree/main/sequencehash)
 - [ ] Error Checking and Handling
