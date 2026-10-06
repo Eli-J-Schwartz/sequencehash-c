@@ -33,14 +33,15 @@ void name##_derive_key(uint8_t* input, uint64_t input_len, uint8_t* output, uint
 
 #define GENERATE_SEQUENCE_FUNCTION_INIT(name) \
 bool name##_sequence_function_init(name##_sequence_function_state* state, uint8_t* k, uint64_t k_len, uint64_t f_type) {\
-    name##_derive_key(k, k_len, state->k_i, 0x55);\
+    if (k_len > 0 && k == NULL) return true;\
+    uint8_t k_i[name##_BLOCK_SIZE];\
+    name##_derive_key(k, k_len, k_i, 0x55);\
     name##_derive_key(k, k_len, state->k_o, 0xaa);\
     state->k_len = k_len;\
-    state->f_type = f_type;\
     state->input_count = 0;\
     \
     name##_init(&state->internal_state);\
-    name##_update(&state->internal_state, state->k_i, name##_BLOCK_SIZE);\
+    name##_update(&state->internal_state, k_i, name##_BLOCK_SIZE);\
     name##_update(&state->internal_state, "SEQHSH_I", 8);\
     uint8_t temp[16];\
     store_int_msb(f_type, temp);\
@@ -56,6 +57,7 @@ bool name##_sequence_function_init(name##_sequence_function_state* state, uint8_
 #define GENERATE_SEQUENCE_FUNCTION_ADD(name) \
 bool name##_sequence_function_add(name##_sequence_function_state* state, uint8_t* input, uint64_t input_len) {\
     if (state->status != SEQUENCE_FUNCTION_INITIALIZED) return true;\
+    if (input_len > 0 && input == NULL) return true;\
     name##_update(&state->internal_state, input, input_len);\
     uint8_t temp[16];\
     store_int_lsb(input_len, temp);\
@@ -65,14 +67,15 @@ bool name##_sequence_function_add(name##_sequence_function_state* state, uint8_t
 }
 
 #define GENERATE_SEQUENCE_FUNCTION_FINALIZE(name) \
-bool name##_sequence_function_finalize(name##_sequence_function_state* state, uint8_t* s, uint64_t s_len, uint8_t* output) {\
+bool name##_sequence_function_finalize(name##_sequence_function_state* state, uint8_t* s, uint64_t s_len, uint8_t* output, uint64_t f_type) {\
     if (state->status != SEQUENCE_FUNCTION_INITIALIZED) return true;\
+    if ((s > 0 && s == NULL) || output == NULL) return true;\
     name##_state final_state;\
     name##_init(&final_state);\
     name##_update(&final_state, state->k_o, name##_BLOCK_SIZE);\
     name##_update(&final_state, "SEQHSH_O", 8);\
     uint8_t temp[16];\
-    store_int_msb(state->f_type, temp);\
+    store_int_msb(f_type, temp);\
     name##_update(&final_state, temp, 16);\
     store_int_msb(s_len, temp);\
     name##_update(&final_state, temp, 16);\
@@ -103,10 +106,10 @@ bool sequence_hash_##name##_add(sequence_hash_##name##_state* state, uint8_t* in
     return name##_sequence_function_add(&state->internal_state, input, input_len);\
 }\
 bool sequence_hash_##name##_finalize(sequence_hash_##name##_state* state, uint8_t* output) {\
-    return name##_sequence_function_finalize(&state->internal_state, NULL, 0, output);\
+    return name##_sequence_function_finalize(&state->internal_state, NULL, 0, output, F_SEQHSH);\
 }\
 bool sequence_hash_##name##_finalize_with_customizer(sequence_hash_##name##_state* state, uint8_t* s, uint64_t s_len, uint8_t* output) {\
-    return name##_sequence_function_finalize(&state->internal_state, s, s_len, output);\
+    return name##_sequence_function_finalize(&state->internal_state, s, s_len, output, F_SEQHSH);\
 }\
 uint64_t sequence_hash_##name##_output_size() {return name##_OUTPUT_SIZE;}\
 uint64_t sequence_hash_##name##_block_size() {return name##_BLOCK_SIZE;}
@@ -120,10 +123,10 @@ bool sequence_mac_##name##_add(sequence_mac_##name##_state* state, uint8_t* inpu
     return name##_sequence_function_add(&state->internal_state, input, input_len);\
 }\
 bool sequence_mac_##name##_finalize(sequence_mac_##name##_state* state, uint8_t* output) {\
-    return name##_sequence_function_finalize(&state->internal_state, NULL, 0, output);\
+    return name##_sequence_function_finalize(&state->internal_state, NULL, 0, output, F_SEQMAC);\
 }\
 bool sequence_mac_##name##_finalize_with_customizer(sequence_mac_##name##_state* state, uint8_t* s, uint64_t s_len, uint8_t* output) {\
-    return name##_sequence_function_finalize(&state->internal_state, s, s_len, output);\
+    return name##_sequence_function_finalize(&state->internal_state, s, s_len, output, F_SEQMAC);\
 }\
 uint64_t sequence_mac_##name##_output_size() {return name##_OUTPUT_SIZE;}\
 uint64_t sequence_mac_##name##_block_size() {return name##_BLOCK_SIZE;}

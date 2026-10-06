@@ -14,9 +14,7 @@ typedef enum sequence_function_status {
 #define GENERATE_SEQUENCE_FUNCTION_STATE(name) \
 typedef struct name##_sequence_function_state {\
     uint8_t k_o[name##_BLOCK_SIZE];\
-    uint8_t k_i[name##_BLOCK_SIZE];\
     uint64_t k_len;\
-    uint64_t f_type;\
     uint64_t input_count;\
     name##_state internal_state;\
     sequence_function_status status;\
