@@ -42,7 +42,8 @@ void sha3_round_function(uint64_t* sha3_state) {
         uint64_t temp[25] = {0};
         for (int i = 0; i < 25; i++) temp[i%5] ^= sha3_state[i];
         for (int i = 0; i < 25; i++) sha3_state[i] ^= temp[(i+4)%5] ^ sha3_LROT(temp[(i+1)%5], 1);
-        for (int i = 0; i < 25; i++) temp[sha3_MOVS[i]] = sha3_LROT(sha3_state[i], sha3_ROTS[i]);
+        temp[0] = sha3_state[0];
+        for (int i = 1; i < 25; i++) temp[sha3_MOVS[i]] = sha3_LROT(sha3_state[i], sha3_ROTS[i]);
         for (int x = 0; x < 5; x++) {
             for (int y = 0; y < 5; y++) {
                 sha3_state[y*5+x] = temp[y*5+x] ^ (temp[y*5+(x+2)%5] & ~temp[y*5+(x+1)%5]);

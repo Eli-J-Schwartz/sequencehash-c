@@ -132,7 +132,6 @@ uint64_t sequence_mac_##name##_output_size() {return name##_OUTPUT_SIZE;}\
 uint64_t sequence_mac_##name##_block_size() {return name##_BLOCK_SIZE;}
 
 #define GENERATE_ALL(name) \
-GENERATE_SEQUENCE_FUNCTION_STATE(name) \
 GENERATE_DERIVE_FUNCTION(name) \
 GENERATE_SEQUENCE_FUNCTION_INIT(name) \
 GENERATE_SEQUENCE_FUNCTION_ADD(name) \

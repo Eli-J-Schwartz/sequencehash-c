@@ -12,7 +12,7 @@ void sha3_256_finalize(uint8_t* output, sha3_256_state* state);
 
 #define sha3_512_BLOCK_SIZE 72
 #define sha3_512_OUTPUT_SIZE 64
-typedef struct sha3_512state {
+typedef struct sha3_512_state {
     uint64_t internal_state[25];
     uint64_t input_pos;
 } sha3_512_state;
