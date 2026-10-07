@@ -82,7 +82,7 @@ void sha256_init(sha256_state* state) {
 }
 
 void sha256_update(sha256_state* state, const uint8_t* input, uint64_t input_len) {
-    for (int i = 0; i < input_len; i++) {
+    for (uint64_t i = 0; i < input_len; i++) {
         state->input_block[state->input_pos] = input[i];
         if (++state->input_pos == sha256_BLOCK_SIZE) {
             sha256_round_function(state);
@@ -99,7 +99,7 @@ void sha256_finalize(uint8_t* output, sha256_state* state) {
         sha256_round_function(state);
         state->input_pos = 0;
     }
-    for (int i = state->input_pos; i < 64; i++) state->input_block[i] = 0;
+    for (uint64_t i = state->input_pos; i < 64; i++) state->input_block[i] = 0;
     state->input_len *= 8;
     for (int i = 0; i < 8; i++) state->input_block[63-i] = (state->input_len >> (8*i)) & 0xff;
     sha256_round_function(state);
@@ -198,7 +198,7 @@ void sha512_init(sha512_state* state) {
 }
 
 void sha512_update(sha512_state* state, const uint8_t* input, uint64_t input_len) {
-    for (int i = 0; i < input_len; i++) {
+    for (uint64_t i = 0; i < input_len; i++) {
         state->input_block[state->input_pos] = input[i];
         if (++state->input_pos == sha512_BLOCK_SIZE) {
             sha512_round_function(state);
@@ -215,7 +215,7 @@ void sha512_finalize(uint8_t* output, sha512_state* state) {
         sha512_round_function(state);
         state->input_pos = 0;
     }
-    for (int i = state->input_pos; i < 128; i++) state->input_block[i] = 0;
+    for (uint64_t i = state->input_pos; i < 128; i++) state->input_block[i] = 0;
     state->input_block[127] = (state->input_len << 3) & 0xff;
     for (int i = 1; i < 9; i++) state->input_block[127-i] = (state->input_len >> (8*i-3)) & 0xff;
     sha512_round_function(state);

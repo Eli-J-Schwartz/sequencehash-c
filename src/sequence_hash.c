@@ -19,8 +19,8 @@ void store_int_lsb(uint64_t input, uint8_t* output) {
 #define GENERATE_DERIVE_FUNCTION(name) \
 void name##_derive_key(uint8_t* input, uint64_t input_len, uint8_t* output, uint8_t t) {\
     if (input_len <= name##_BLOCK_SIZE) {\
-        for (int i = 0; i < input_len; i++) output[i] = input[i];\
-        for (int i = input_len; i < name##_BLOCK_SIZE; i++) output[i] = 0;\
+        for (uint64_t i = 0; i < input_len; i++) output[i] = input[i];\
+        for (uint64_t i = input_len; i < name##_BLOCK_SIZE; i++) output[i] = 0;\
     } else {\
         name##_state state;\
         name##_init(&state);\
@@ -42,7 +42,7 @@ bool name##_sequence_function_init(name##_sequence_function_state* state, uint8_
     \
     name##_init(&state->internal_state);\
     name##_update(&state->internal_state, k_i, name##_BLOCK_SIZE);\
-    name##_update(&state->internal_state, "SEQHSH_I", 8);\
+    name##_update(&state->internal_state, (uint8_t*)"SEQHSH_I", 8);\
     uint8_t temp[16];\
     store_int_msb(f_type, temp);\
     name##_update(&state->internal_state, temp, 16);\
@@ -69,11 +69,11 @@ bool name##_sequence_function_add(name##_sequence_function_state* state, uint8_t
 #define GENERATE_SEQUENCE_FUNCTION_FINALIZE(name) \
 bool name##_sequence_function_finalize(name##_sequence_function_state* state, uint8_t* s, uint64_t s_len, uint8_t* output, uint64_t f_type) {\
     if (state->status != SEQUENCE_FUNCTION_INITIALIZED) return true;\
-    if ((s > 0 && s == NULL) || output == NULL) return true;\
+    if ((s_len > 0 && s == NULL) || output == NULL) return true;\
     name##_state final_state;\
     name##_init(&final_state);\
     name##_update(&final_state, state->k_o, name##_BLOCK_SIZE);\
-    name##_update(&final_state, "SEQHSH_O", 8);\
+    name##_update(&final_state, (uint8_t*)"SEQHSH_O", 8);\
     uint8_t temp[16];\
     store_int_msb(f_type, temp);\
     name##_update(&final_state, temp, 16);\

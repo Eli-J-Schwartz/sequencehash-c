@@ -53,8 +53,8 @@ bool sequence_hash_##name##_test() {\
         uint8_t output[sequence_hash_##name##_output_size()];\
         if (sequence_hash_##name##_finalize_with_customizer(&state, customizer, customizer_len, output)) correct = false;\
         uint8_t* expected = (uint8_t*)malloc(sequence_hash_##name##_output_size());\
-        for (int i = 0; i < sequence_hash_##name##_output_size(); i++) expected[i] = decode_hex_char(input_line[25+i*2])*16+decode_hex_char(input_line[26+i*2]);\
-        for (int i = 0; i < sequence_hash_##name##_output_size(); i++) if (output[i] != expected[i]) correct = false;\
+        for (uint64_t i = 0; i < sequence_hash_##name##_output_size(); i++) expected[i] = decode_hex_char(input_line[25+i*2])*16+decode_hex_char(input_line[26+i*2]);\
+        for (uint64_t i = 0; i < sequence_hash_##name##_output_size(); i++) if (output[i] != expected[i]) correct = false;\
         if (correct) printf(" [\x1b[32mPASS\x1b[0m]\n");\
         else printf(" [\x1b[31mFAIL\x1b[0m]\n");\
         getline(&input_line, &input_len, test_file);\
@@ -71,6 +71,7 @@ bool sequence_hash_##name##_test() {\
     printf("Results for SequenceHash-" #name " Tests: %d/%d Correct", correct_count, test_count);\
     if (correct_count == test_count) printf(" [\x1b[32mALL PASSED\x1b[0m]\n");\
     else printf(" [\x1b[31mSOME FAILED\x1b[0m]\n");\
+    return correct_count == test_count;\
 }
 
 #define GENERATE_MAC_TEST(name) \
@@ -121,8 +122,8 @@ bool sequence_mac_##name##_test() {\
         if (sequence_mac_##name##_finalize_with_customizer(&state, customizer, customizer_len, output)) correct = false;\
         if (!expected_fail) {\
             uint8_t* expected = (uint8_t*)malloc(sequence_mac_##name##_output_size());\
-            for (int i = 0; i < sequence_mac_##name##_output_size(); i++) expected[i] = decode_hex_char(input_line[25+i*2])*16+decode_hex_char(input_line[26+i*2]);\
-            for (int i = 0; i < sequence_mac_##name##_output_size(); i++) if (output[i] != expected[i]) correct = false;\
+            for (uint64_t i = 0; i < sequence_mac_##name##_output_size(); i++) expected[i] = decode_hex_char(input_line[25+i*2])*16+decode_hex_char(input_line[26+i*2]);\
+            for (uint64_t i = 0; i < sequence_mac_##name##_output_size(); i++) if (output[i] != expected[i]) correct = false;\
             free(expected);\
         }\
         if (expected_fail) correct = !correct;\
@@ -142,6 +143,7 @@ bool sequence_mac_##name##_test() {\
     printf("Results for SequenceHash-" #name " Tests: %d/%d Correct", correct_count, test_count);\
     if (correct_count == test_count) printf(" [\x1b[32mALL PASSED\x1b[0m]\n");\
     else printf(" [\x1b[31mSOME FAILED\x1b[0m]\n");\
+    return correct_count == test_count;\
 }
 
 GENERATE_HASH_TEST(sha256)

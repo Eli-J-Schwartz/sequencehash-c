@@ -58,7 +58,7 @@ void sha3_256_init(sha3_256_state* state) {
 }
 
 void sha3_256_update(sha3_256_state* state, const uint8_t* input, uint64_t input_len) {
-    for (int i = 0; i < input_len; i++) {
+    for (uint64_t i = 0; i < input_len; i++) {
         state->internal_state[state->input_pos/8] ^= ((uint64_t) input[i]) << (state->input_pos%8*8);
         if (++state->input_pos == sha3_256_BLOCK_SIZE) {
             sha3_round_function(state->internal_state);
@@ -82,7 +82,7 @@ void sha3_512_init(sha3_512_state* state) {
 }
 
 void sha3_512_update(sha3_512_state* state, const uint8_t* input, uint64_t input_len) {
-    for (int i = 0; i < input_len; i++) {
+    for (uint64_t i = 0; i < input_len; i++) {
         state->internal_state[state->input_pos/8] ^= ((uint64_t) input[i]) << (state->input_pos%8*8);
         if (++state->input_pos == sha3_512_BLOCK_SIZE) {
             sha3_round_function(state->internal_state);

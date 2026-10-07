@@ -79,7 +79,7 @@ void blake2s_init(blake2s_state* state) {
 }
 
 void blake2s_update(blake2s_state* state, const uint8_t* input, uint64_t input_len) {
-    for (int i = 0; i < input_len; i++) {
+    for (uint64_t i = 0; i < input_len; i++) {
         if (state->input_pos == blake2s_BLOCK_SIZE) {
             state->input_count += blake2s_BLOCK_SIZE;
             blake2s_round_function(state, state->input_count, 0);
@@ -92,7 +92,7 @@ void blake2s_update(blake2s_state* state, const uint8_t* input, uint64_t input_l
 }
 
 void blake2s_finalize(uint8_t* output, blake2s_state* state) {
-    for (int i = state->input_pos; i < blake2s_BLOCK_SIZE; i++) state->input_block[i] = 0;
+    for (uint64_t i = state->input_pos; i < blake2s_BLOCK_SIZE; i++) state->input_block[i] = 0;
     blake2s_round_function(state, state->input_len, 0xffffffff);
     for (int i = 0; i < blake2s_OUTPUT_SIZE; i++) {
         output[i] = (state->internal_state[i/4] >> (8*(i%4))) & 0xff;
@@ -164,7 +164,7 @@ void blake2b_init(blake2b_state* state) {
 }
 
 void blake2b_update(blake2b_state* state, const uint8_t* input, uint64_t input_len) {
-    for (int i = 0; i < input_len; i++) {
+    for (uint64_t i = 0; i < input_len; i++) {
         if (state->input_pos == blake2b_BLOCK_SIZE) {
             state->input_count += blake2b_BLOCK_SIZE;
             blake2b_round_function(state, state->input_count, 0);
@@ -177,7 +177,7 @@ void blake2b_update(blake2b_state* state, const uint8_t* input, uint64_t input_l
 }
 
 void blake2b_finalize(uint8_t* output, blake2b_state* state) {
-    for (int i = state->input_pos; i < blake2b_BLOCK_SIZE; i++) state->input_block[i] = 0;
+    for (uint64_t i = state->input_pos; i < blake2b_BLOCK_SIZE; i++) state->input_block[i] = 0;
     blake2b_round_function(state, state->input_len, 0xffffffffffffffff);
     for (int i = 0; i < blake2b_OUTPUT_SIZE; i++) {
         output[i] = (state->internal_state[i/8] >> (8*(i%8))) & 0xff;
